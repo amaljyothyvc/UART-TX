@@ -9,7 +9,8 @@ baudrate is the number of times symbol changes occur per second.
 if systemclk=50_000_000
 baudrate=9600
 
-then systemclk/baudrate = number of sysetm clock needed for 1 baudrate to succcesfully occur.
+then systemclk/baudrate = number of sysetm clock needed for 1 symbol to be transferred 
+system clock/baudrate = system clock/Symbol transfer
 
 when the internal counter reaches systemclk/baudrate we make the baudtick==1, transition occurs.
 
