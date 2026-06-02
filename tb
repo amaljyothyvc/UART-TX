@@ -1,0 +1,64 @@
+`timescale 1ns/1ps
+
+module tb;
+
+    logic [7:0] data_in;
+    logic       clk;
+    logic       rst_n;
+    logic       start_valid;
+    logic       busy;
+    logic       tx;
+
+    uart_rx dut (
+        .data_in(data_in),
+        .clk(clk),
+        .rst_n(rst_n),
+        .start_valid(start_valid),
+        .busy(busy),
+        .tx(tx)
+    );
+
+    // 50 MHz clock
+    initial begin
+        clk = 0;
+        forever #10 clk = ~clk;
+    end
+
+    initial begin
+
+        // Dump all signals
+        $dumpfile("uart.vcd");
+        $dumpvars(0, tb);
+
+        // Reset
+        rst_n       = 0;
+        start_valid = 0;
+        data_in     = 8'h00;
+
+        #100;
+        rst_n = 1;
+
+        // Transmit A5
+        #50;
+        data_in     = 8'hA5;
+        start_valid = 1;
+
+        #20;
+        start_valid = 0;
+
+        // Wait long enough for transmission
+        #2_000_000;
+
+        // Transmit 3C
+        data_in     = 8'h3C;
+        start_valid = 1;
+
+        #20;
+        start_valid = 0;
+
+        #2_000_000;
+
+        $finish;
+    end
+
+endmodule
